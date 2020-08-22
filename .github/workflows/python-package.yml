@@ -33,13 +33,14 @@ jobs:
       run: | 
         cd docs
         make html
+        touch .nojekyll
     - name: Deploy
       uses: ad-m/github-push-action@v0.6.0
       with:
         github_token: ${{secrets.GHUB_TOKEN}}
         branch: gh_pages
         force: true
-        direcotry: docs/_build
+        directory: docs/_build
 
 
         
