@@ -38,9 +38,7 @@ jobs:
       uses: ad-m/github-push-action@v0.6.0
       with:
         github_token: ${{secrets.GHUB_TOKEN}}
-        branch: gh_pages
         force: true
-        directory: docs/_build
 
 
         
