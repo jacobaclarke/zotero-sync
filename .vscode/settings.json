@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "/home/kde/.cache/pypoetry/virtualenvs/zotero-sync-bH7qNtFV-py3.8/bin/python3",
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
+}
