@@ -1,5 +1,6 @@
 # Zotero Sync
 
+![demo](demo.gif)
 <p style="color:red">Back up your data when using this script. I have not lost any, but I can't make any guarantees.</p>
 
 A simple module for updating zotflies directories.
