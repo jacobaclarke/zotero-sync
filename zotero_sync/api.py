@@ -4,6 +4,7 @@ Model with helper functions for making api calls
 import requests
 import json
 import click
+from pathlib import Path
 
 version = '3'
 
@@ -19,11 +20,16 @@ class ApiClient:
     Attributes:
         api_key (str): see api key arg
         base (str): base url string used for http requests
+        headers (dict): Headers for making requests to zotero api
     """
 
     def __init__(self, api_key: str, user_id: str):
         self.api_key = api_key
         self.base = f'https://api.zotero.org/users/{user_id}/'
+        self.headers = {
+            "Zotero-API-Version": version,
+            "Authorization": f"Bearer   {self.api_key}"
+        }
 
     def get_page(self, index: int, path: str) -> []:
         """
@@ -39,10 +45,7 @@ class ApiClient:
         return json.loads(
             requests.get(
                 self.base + path,
-                headers={
-                    "Zotero-API-Version": version,
-                    "Authorization": f"Bearer   {self.api_key}"
-                },
+                headers=self.headers,
                 params={
                     'limit': '100',
                     'start': index
@@ -68,3 +71,36 @@ class ApiClient:
             res = self.get_page(index, path)
         click.echo(click.style('Data Loaded.', fg='green'))
         return final
+
+    def create_item(self, path: Path):
+        template = [
+            {
+                "itemType": "book",
+                "title": str(path.name),
+                "tags": [
+                    {"tag": "folder_upload"}
+                ]
+            }
+        ]
+        res = requests.post(self.base + 'items',
+                            headers=self.headers,
+                            data=json.dumps(template))
+        
+        assert (res.status_code == 200), 'Received an error html response'
+        parentItem = json.loads(res.text)["success"]["0"]
+        template = [
+            {
+                "itemType": "attachment",
+                "linkMode": "linked_file",
+                "title": str(path.name),
+                "parentItem": parentItem,
+                "path": str(path),
+                "tags": [
+                    {"tag": "folder_upload"}
+                ]
+            }
+        ]
+        res = requests.post(self.base + 'items',
+                            headers=self.headers,
+                            data=json.dumps(template))
+        assert (res.status_code == 200), 'Received an error html response'
