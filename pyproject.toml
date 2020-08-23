@@ -15,9 +15,7 @@ pytest = "^5.2"
 autopep8 = "^1.5.4"
 flake8 = "^3.8.3"
 sphinx = "^3.2.1"
-recommonmark = "^0.6.0"
 sphinxcontrib-napoleon = "^0.7"
-autodock = "^0.0.2"
 autodoc = "^0.5.0"
 
 [build-system]
