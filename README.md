@@ -1,6 +1,6 @@
 # Zotero Sync
 
-<p style="color:red">Back up your data when using this script. I have not lost any, but I can't make any guarantees.</p>
+`Back up your data when using this script. I have not lost any, but I can't make any guarantees.`
 
 A simple module for updating zotflies directories.
 
@@ -14,10 +14,13 @@ pip install zotero_sync
 
 ## Usage
 
-Create a `.zoterosync` file:
+Go and create a new api key at https://www.zotero.org/settings/keys. Take note of the api key and also take note of the line that says "Your userID for use in API calls is ***"
+
+Create a `.zoterosync` file in your home directory:
 
 ``` json
-//~/.zoterosync
+# ~/.zoterosync
+
 ZOTFILE_DIR='***'
 USER_ID = '***'
 API_KEY = '***'
