@@ -2,9 +2,7 @@
 
 `Back up your data when using this script. I have not lost any, but I can't make any guarantees.`
 
-A simple module for updating zotflies directories.
-
-You can use this to delete redundant files or upload newly added files from the filesystem.
+A simple module for updating zotflies directories. You can use this to delete redundant files or upload newly added files from the filesystem. It works by looking at every reference you have on zotero.org (you don't need to have files uploaded to make this work) and then compares the paths of those attachements to the ones in you zotfile directory. If there are any on your zotfile directory that aren't in your zotfile cloud, you can choose to "trash" or "upload" them.
 
 ## Installation
 
