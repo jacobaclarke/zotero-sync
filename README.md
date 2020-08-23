@@ -1,11 +1,10 @@
 # Zotero Sync
 
 ![demo](demo.gif)
-<p style="color:red">Back up your data when using this script. I have not lost any, but I can't make any guarantees.</p>
 
-A simple module for updating zotflies directories.
+`Back up your data when using this script. I have not lost any, but I can't make any guarantees.`
 
-You can use this to delete redundant files or upload newly added files from the filesystem.
+A simple module for updating zotflies directories. You can use this to delete redundant files or upload newly added files from the filesystem. It works by looking at every reference you have on zotero.org (you don't need to have files uploaded to make this work) and then compares the paths of those attachements to the ones in you zotfile directory. If there are any on your zotfile directory that aren't in your zotfile cloud, you can choose to "trash" or "upload" them.
 
 ## Installation
 
@@ -15,10 +14,13 @@ pip install zotero_sync
 
 ## Usage
 
-Create a `.zoterosync` file:
+Go and create a new api key at https://www.zotero.org/settings/keys. Take note of the api key and also take note of the line that says "Your userID for use in API calls is ***"
+
+Create a `.zoterosync` file in your home directory:
 
 ``` json
-//~/.zoterosync
+# ~/.zoterosync
+
 ZOTFILE_DIR='***'
 USER_ID = '***'
 API_KEY = '***'
