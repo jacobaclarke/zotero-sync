@@ -1,8 +1,3 @@
-.. Zotero Sync documentation master file, created by
-   sphinx-quickstart on Sat Aug 22 17:59:53 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Zotero Sync's documentation!
 =======================================
 
@@ -10,8 +5,21 @@ Welcome to Zotero Sync's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-.. automodule:: zotero_sync
+API
+------
+
+.. automodule:: zotero_sync.api
    :members:
+
+|
+
+Main
+------
+
+.. automodule:: zotero_sync.__main__
+   :members:
+
+|
 
 Indices and tables
 ==================
