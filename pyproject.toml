@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "zotero-sync"
-version = "0.1.2"
+version = "0.1.5"
 description = "A module for managing zotfiles files"
 authors = ["Jacob Clarke <jacobclarke718@gmail.com>"]
 readme = "README.md"
@@ -27,4 +27,4 @@ requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
 [tool.poetry.scripts]
-zotero_sync = 'src.__main__:cli'
+zotero_sync = 'zotero_sync.__main__:cli'

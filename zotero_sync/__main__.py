@@ -1,5 +1,4 @@
 import click
-from dataclasses import dataclass
 from zotero_sync.api import ApiClient
 import os
 from pathlib import Path
@@ -95,8 +94,9 @@ def upload(ctx):
     computer_unique = get_paths(ctx.obj['FILE_DIR'], ctx.obj['CLIENT'])
     if click.confirm(
          f"Are you sure you upload {len(computer_unique)} files?"):
-        for path in computer_unique:
-            ctx.obj['CLIENT'].create_item(path)
+        with click.progressbar(computer_unique) as paths:
+            for path in paths:
+                ctx.obj['CLIENT'].create_item(path)
     click.echo(click.style('Successfully uploaded files!', fg='green'))
 
 
