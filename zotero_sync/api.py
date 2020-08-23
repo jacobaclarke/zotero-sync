@@ -48,7 +48,8 @@ class ApiClient:
                 headers=self.headers,
                 params={
                     'limit': '100',
-                    'start': index
+                    'start': index,
+                    'itemType':'attachment'
                 }).text)
 
     def get_all_pages(self, path: str = ''):
@@ -92,12 +93,13 @@ class ApiClient:
             {
                 "itemType": "attachment",
                 "linkMode": "linked_file",
-                "title": str(path.name),
+                "title": str(path.stem),
                 "parentItem": parentItem,
                 "path": str(path),
                 "tags": [
                     {"tag": "folder_upload"}
-                ]
+                ],
+                "contentType": "application/pdf"
             }
         ]
         res = requests.post(self.base + 'items',
