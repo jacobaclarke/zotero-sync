@@ -70,14 +70,18 @@ class ApiClient:
             final += res
             index += 100
             res = self.get_page(index, path)
-        click.echo(click.style('Data Loaded.', fg='green'))
+            click.echo(click.style(
+                f"Retrieved {index} online files so far...\r", fg="blue"),
+                nl=False)
+        click.echo(click.style(
+            f"Retrieved {len(final)} online files in total.    ", fg="green"))
         return final
 
     def create_item(self, path: Path):
         template = [
             {
                 "itemType": "book",
-                "title": str(path.name),
+                "title": str(path.stem),
                 "tags": [
                     {"tag": "folder_upload"}
                 ]
