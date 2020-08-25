@@ -1,5 +1,5 @@
 from zotero_sync import __version__
-from zotero_sync.click import cli 
+from zotero_sync.click import cli
 from click.testing import CliRunner
 from PyPDF2 import PdfFileWriter
 import pytest

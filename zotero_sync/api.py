@@ -110,3 +110,33 @@ class ApiClient:
                             headers=self.headers,
                             data=json.dumps(template))
         assert (res.status_code == 200), 'Received an error html response'
+
+
+def get_paths(file_dir: Path, api_key: str, user_id: str) -> (list, ApiClient):
+    """Returns both computer and cloud paths
+
+    Args:
+        file_dir (Path): location of zotfile directory
+        client (ApiClient)
+
+    Returns:
+        list: A list of uniqe paths on the computer.
+    """
+    dotfile_explanation = (
+        "This can be provided as an option or "
+        "in a .zoterozync file as ZOTFILE_DIR")
+    assert(file_dir is not None), (
+        "No zotfile path was given. " + dotfile_explanation)
+    assert(api_key is not None), (
+        "No api key was given. " + dotfile_explanation)
+    assert(user_id is not None), (
+        "No user id was given. " + dotfile_explanation)
+    client = ApiClient(api_key, user_id)
+    r = client.get_all_pages('items')
+    cloud_paths = [path["data"]["path"]
+                   for path in r if "path" in path["data"]]
+    computer_paths = [path for path in file_dir.glob(
+        "**/*.pdf") if "trash" not in str(path)]
+    computer_unique = [path for path in computer_paths if str(
+        path.absolute()) not in cloud_paths]
+    return computer_unique, client
