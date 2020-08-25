@@ -22,6 +22,7 @@ flake8 = "^3.8.3"
 sphinx = "^3.2.1"
 sphinxcontrib-napoleon = "^0.7"
 autodoc = "^0.5.0"
+PyPDF2 = "^1.26.0"
 
 [tool.poetry.scripts]
 zotero_sync = 'zotero_sync.__main__:cli'

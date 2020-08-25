@@ -2,9 +2,9 @@ import click
 import subprocess
 from zotero_sync.api import ApiClient
 import os
+import uuid
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
-from shlex import quote
 from shutil import copy
 load_dotenv(find_dotenv(filename='.zoterosync'))
 
@@ -78,12 +78,14 @@ def trash(ctx):
     """
     computer_unique = get_paths(ctx.obj['FILE_DIR'], ctx.obj['CLIENT'])
     if click.confirm(
-         f"Are you sure you want to trash {len(computer_unique)} files?"):
+         f"Are you sure you want to trash {len(computer_unique)} files?",
+         default=True,
+         abort=True):
         for path in computer_unique:
             trash = ctx.obj['FILE_DIR'] / 'trash'
             trash.mkdir(parents=True, exist_ok=True)
             path.rename(trash / path.name)
-    click.echo(click.style('Successfully deleted files!', fg='green'))
+        click.echo(click.style('Successfully deleted files!', fg='green'))
 
 
 @cli.command()
@@ -97,16 +99,18 @@ def upload(ctx):
     """
     computer_unique = get_paths(ctx.obj['FILE_DIR'], ctx.obj['CLIENT'])
     if click.confirm(
-         f"Are you sure you upload {len(computer_unique)} files?"):
+         f"Are you sure you upload {len(computer_unique)} files?",
+         abort=True,
+         default=True):
         with click.progressbar(computer_unique) as paths:
             for path in paths:
                 ctx.obj['CLIENT'].create_item(path)
     click.echo(click.style('Successfully uploaded files!', fg='green'))
 
 
+            #   default=os.getenv('ZOTFILE_DIR'),
 @cli.command()
 @click.option('--file_dir',
-              default=os.getenv('ZOTFILE_DIR'),
               type=click.Path(exists=True))
 def optimize(file_dir: click.Path):
     """
@@ -148,6 +152,7 @@ def process_pdfs(file_dir: click.Path, command: str):
             continue
             # if e.returncode not in [6, 8, 10]:
         (path.resolve().parent / temp).rename(path.resolve())
+        Path(infile).unlink()
     click.echo(click.style(f'Finished Processing {count} files!', fg='green'))
 
 
