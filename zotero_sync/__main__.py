@@ -108,9 +108,15 @@ def upload(ctx):
     click.echo(click.style('Successfully uploaded files!', fg='green'))
 
 
-            #   default=os.getenv('ZOTFILE_DIR'),
-@cli.command()
+
+@click.group()
+def group2():
+    pass
+
+
+@group2.command()
 @click.option('--file_dir',
+              default=os.getenv('ZOTFILE_DIR'),
               type=click.Path(exists=True))
 def optimize(file_dir: click.Path):
     """
@@ -156,7 +162,7 @@ def process_pdfs(file_dir: click.Path, command: str):
     click.echo(click.style(f'Finished Processing {count} files!', fg='green'))
 
 
-@cli.command()
+@group2.command()
 @click.option('--file_dir',
               default=os.getenv('ZOTFILE_DIR'),
               type=click.Path(exists=True))
@@ -170,5 +176,8 @@ def ocr(file_dir: click.Path):
         'python -m ocrmypdf --tesseract-timeout 10 {input} {output}')
 
 
+clin = click.CommandCollection(sources=[cli, group2])
+
+
 if __name__ == "__main__":
-    cli()
+    clin()

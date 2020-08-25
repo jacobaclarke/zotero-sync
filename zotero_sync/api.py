@@ -36,7 +36,7 @@ class ApiClient:
         Gets a single page of API response
 
         Args:
-            index (int): The starting index for results. 
+            index (int): The starting index for results.
             path (str): The api path to make a request to
 
         Returns:
@@ -49,7 +49,7 @@ class ApiClient:
                 params={
                     'limit': '100',
                     'start': index,
-                    'itemType':'attachment'
+                    'itemType': 'attachment'
                 }).text)
 
     def get_all_pages(self, path: str = ''):
@@ -90,7 +90,7 @@ class ApiClient:
         res = requests.post(self.base + 'items',
                             headers=self.headers,
                             data=json.dumps(template))
-        
+
         assert (res.status_code == 200), 'Received an error html response'
         parentItem = json.loads(res.text)["success"]["0"]
         template = [

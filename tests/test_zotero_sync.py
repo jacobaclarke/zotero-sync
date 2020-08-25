@@ -1,5 +1,5 @@
 from zotero_sync import __version__
-from zotero_sync.__main__ import cli
+from zotero_sync.__main__ import cli, group2
 from click.testing import CliRunner
 from PyPDF2 import PdfFileWriter
 import pytest
@@ -29,8 +29,8 @@ def data_dir(tmp_path_factory):
         parent.mkdir(parents=True)
         for name in range(1):
             with (
-                parent / f"{str(uuid.uuid4())}.pdf"
-                ).open(mode='wb') as output_file:
+                    parent / f"{str(uuid.uuid4())}.pdf"
+                    ).open(mode='wb') as output_file:
                 pdf_writer.write(output_file)
     return data
 
@@ -38,11 +38,12 @@ def data_dir(tmp_path_factory):
 def test_optimize(data_dir):
     num_files = get_num_files(data_dir)
     result = runner.invoke(
-        cli,
+        group2,
         [
             'optimize',
             '--file_dir', data_dir,
         ])
+    print(result.output)
     assert result.exit_code == 0
     assert f"Finished Processing {num_files} files!" in result.output
     assert "Optimizing files" in result.output
@@ -51,11 +52,12 @@ def test_optimize(data_dir):
 
 def test_ocr(data_dir):
     result = runner.invoke(
-        cli,
+        group2,
         [
             'ocr',
-            '--file_dir', data_dir
+            '--file_dir', data_dir,
         ])
+    print(result.output)
     assert result.exit_code == 0
 
 
