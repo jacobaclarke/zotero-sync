@@ -23,7 +23,7 @@ def test_version():
 def data_dir(tmp_path_factory):
     pdf_writer = PdfFileWriter()
     pdf_writer.addBlankPage(width=72, height=72)
-    data = tmp_path_factory.mktemp("data")
+    data = tmp_path_factory.mktemp(ZOTFILE_DIR)
     for folder in range(2):
         parent = (data / str(folder))
         parent.mkdir(parents=True)
@@ -68,6 +68,7 @@ def test_trash(data_dir):
 
 
 def test_ocr(data_dir):
+    num_files = get_num_files(data_dir)
     result = runner.invoke(
         cli,
         [
@@ -75,4 +76,5 @@ def test_ocr(data_dir):
             '--file_dir', data_dir,
         ])
     print(result.output)
+    assert get_num_files(data_dir) == num_files
     assert result.exit_code == 0
