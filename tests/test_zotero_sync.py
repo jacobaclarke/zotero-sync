@@ -27,11 +27,10 @@ def data_dir(tmp_path_factory):
     for folder in range(2):
         parent = (data / str(folder))
         parent.mkdir(parents=True)
-        for name in range(1):
-            with (
-                    parent / f"{str(uuid.uuid4())}.pdf"
-            ).open(mode='wb') as output_file:
-                pdf_writer.write(output_file)
+        with (
+                parent / f"{str(uuid.uuid4())}.pdf"
+        ).open(mode='wb') as output_file:
+            pdf_writer.write(output_file)
     return data
 
 
@@ -74,6 +73,21 @@ def test_ocr(data_dir):
         [
             'ocr',
             '--file_dir', data_dir,
+        ])
+    print(result.output)
+    assert get_num_files(data_dir) == num_files
+    assert result.exit_code == 0
+
+
+def test_upload(data_dir):
+    num_files = get_num_files(data_dir)
+    result = runner.invoke(
+        cli,
+        [
+            'upload',
+            '--file_dir', data_dir,
+            '--api_key', API_KEY,
+            '--user_id', USER_ID,
         ])
     print(result.output)
     assert get_num_files(data_dir) == num_files
