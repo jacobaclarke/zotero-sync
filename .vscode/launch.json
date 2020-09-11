@@ -16,7 +16,7 @@
       "type": "python",
       "request": "launch",
       "module": "zotero_sync",
-      "args": ["delete"]
+      "args": ["rename"]
     }
   ]
 }

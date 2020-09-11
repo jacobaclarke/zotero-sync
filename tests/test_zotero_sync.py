@@ -34,19 +34,19 @@ def data_dir(tmp_path_factory):
     return data
 
 
-def test_optimize(data_dir):
-    num_files = get_num_files(data_dir)
-    result = runner.invoke(
-        cli,
-        [
-            'optimize',
-            '--file_dir', data_dir,
-        ])
-    print(result.output)
-    assert result.exit_code == 0
-    assert f"Finished Processing {num_files} files!" in result.output
-    assert "Optimizing files" in result.output
-    assert get_num_files(data_dir) == num_files
+# def test_optimize(data_dir):
+#     num_files = get_num_files(data_dir)
+#     result = runner.invoke(
+#         cli,
+#         [
+#             'optimize',
+#             '--file_dir', data_dir,
+#         ])
+#     print(result.output)
+#     assert result.exit_code == 0
+#     assert f"Finished Processing {num_files} files!" in result.output
+#     assert "Optimizing files" in result.output
+#     assert get_num_files(data_dir) == num_files
 
 
 def test_trash(data_dir):
@@ -66,19 +66,6 @@ def test_trash(data_dir):
     assert result.exit_code == 0
 
 
-def test_ocr(data_dir):
-    num_files = get_num_files(data_dir)
-    result = runner.invoke(
-        cli,
-        [
-            'ocr',
-            '--file_dir', data_dir,
-        ])
-    print(result.output)
-    assert get_num_files(data_dir) == num_files
-    assert result.exit_code == 0
-
-
 def test_upload(data_dir):
     num_files = get_num_files(data_dir)
     result = runner.invoke(
@@ -88,6 +75,22 @@ def test_upload(data_dir):
             '--file_dir', data_dir,
             '--api_key', API_KEY,
             '--user_id', USER_ID,
+        ])
+    print(result.output)
+    assert get_num_files(data_dir) == num_files
+    assert result.exit_code == 0
+
+
+def test_config(data_dir):
+    num_files = get_num_files(data_dir)
+    result = runner.invoke(
+        cli,
+        [
+            'config',
+            '--file_dir', data_dir,
+            '--api_key', API_KEY,
+            '--user_id', USER_ID,
+            '--yes'
         ])
     print(result.output)
     assert get_num_files(data_dir) == num_files

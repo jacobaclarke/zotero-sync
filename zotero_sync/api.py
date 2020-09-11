@@ -77,6 +77,11 @@ class ApiClient:
             f"Retrieved {len(final)} online files in total.    ", fg="green"))
         return final
 
+    def rename_paths(self, payload):
+        res = requests.post(self.base + 'items', headers=self.headers, data=json.dumps(payload))
+        assert (res.status_code == 200), 'Received an error html response'
+        assert (len(json.loads(res.text)['failed']) == 0), 'Received an error html response'
+
     def create_item(self, path: Path):
         template = [
             {
@@ -122,6 +127,50 @@ def get_paths(file_dir: Path, api_key: str, user_id: str) -> (list, ApiClient):
     Returns:
         list: A list of uniqe paths on the computer.
     """
+    client = ApiClient(api_key, user_id)
+    validate_config(file_dir, api_key, user_id)
+    r = client.get_all_pages('items')
+    cloud_paths = [path["data"]["path"]
+                   for path in r if "path" in path["data"]]
+    computer_paths = [path for path in file_dir.glob(
+        "**/*.pdf") if "trash" not in str(path)]
+    computer_unique = [path for path in computer_paths if str(
+        path.absolute()) not in cloud_paths]
+    return computer_unique, client
+
+
+def rename_paths(file_dir: Path, api_key: str, user_id: str, previous_path: Path):
+    """Changes the file path from old location to a new one.
+
+    Args:
+        file_dir (Path): location of zotfile directory
+        client (ApiClient)
+
+    Returns:
+        list: A list of uniqe paths on the computer.
+    """
+    validate_config(file_dir, api_key, user_id)
+    client = ApiClient(api_key, user_id)
+    r = client.get_all_pages('items')
+    renames = []
+    for item in r:
+        if "path" in item["data"]:
+            if previous_path in item['data']['path']:
+                previous_path = str(previous_path)
+                item['data']['path'] = str(Path(file_dir) / item['data']['path'].split(previous_path if previous_path[-1] == '/' else previous_path + '/')[1])
+                res = {
+                    'key': item['key'],
+                    'data': item['data']
+                }
+                renames.append(res)
+    for i in range(int(len(renames)/50) + 1):
+        client.rename_paths(renames[i*50: (i+1)*50])
+
+
+def validate_config(file_dir: Path, api_key: str, user_id: str):
+    """
+    Validates that the config file is correctly configured
+    """
     dotfile_explanation = (
         "This can be provided as an option or "
         "in a .zoterozync file as ZOTFILE_DIR")
@@ -131,12 +180,3 @@ def get_paths(file_dir: Path, api_key: str, user_id: str) -> (list, ApiClient):
         "No api key was given. " + dotfile_explanation)
     assert(user_id is not None), (
         "No user id was given. " + dotfile_explanation)
-    client = ApiClient(api_key, user_id)
-    r = client.get_all_pages('items')
-    cloud_paths = [path["data"]["path"]
-                   for path in r if "path" in path["data"]]
-    computer_paths = [path for path in file_dir.glob(
-        "**/*.pdf") if "trash" not in str(path)]
-    computer_unique = [path for path in computer_paths if str(
-        path.absolute()) not in cloud_paths]
-    return computer_unique, client
